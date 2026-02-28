@@ -11,7 +11,7 @@ export default function ForgotPassword() {
   const sendOtp = async () => {
     if (!email) return toast.error("Enter email");
 
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/auth/send-otp`, {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email }),

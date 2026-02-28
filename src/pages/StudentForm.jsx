@@ -67,7 +67,7 @@ export default function StudentForm() {
 
         const fetchSignatures = async () => {
           try {
-            const res = await fetch("http://localhost:5000/api/signatures");
+            const res = await fetch("https://atkt-backend.onrender.com/api/signatures");
             const data = await res.json();
             setSystemSignature(data);
           } catch (e) { console.error("Signatures not loaded"); }

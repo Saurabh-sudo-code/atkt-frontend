@@ -34,7 +34,7 @@ export default function ForgotPassword() {
     if (newPass !== confirmPass)
       return toast.error("Passwords do not match");
 
-    const res = await fetch("http://localhost:5000/api/auth/reset-password", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/reset-password`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

@@ -137,24 +137,31 @@ export default function StudentForm() {
   const COURSE_LETTER = { CS: "S", IT: "T", BAF: "F", BMS: "M" };
 
   const generateSeatNo = async (stream, rollNo) => {
-    const admissionYear = rollNo.toString().substring(1, 3);
-    const courseLetter = COURSE_LETTER[stream];
-    const counterId = `${admissionYear}_${stream}`;
-    const counterRef = doc(db, "seatCounters", counterId);
+  const admissionYear = rollNo.toString().substring(1, 3);
+  const courseLetter = COURSE_LETTER[stream];
+  const counterId = `${admissionYear}_${stream}`;
+  const counterRef = doc(db, "seatCounters", counterId);
 
-    return await runTransaction(db, async (tx) => {
-      const snap = await tx.get(counterRef);
-      let running = 1;
-      if (!snap.exists()) {
-        tx.set(counterRef, { current: 2 });
-      } else {
-        running = snap.data().current;
-        tx.update(counterRef, { current: running + 1 });
-      }
+  return await runTransaction(db, async (tx) => {
+    const snap = await tx.get(counterRef);
+    let running = 1;
+
+    if (!snap.exists()) {
+      tx.set(counterRef, { current: 2 });
+    } else {
+      running = snap.data().current;
+      tx.update(counterRef, { current: running + 1 });
+    }
+
+    // 🔥 BMS → 3 digit counter
+    if (stream === "BMS") {
       return `${admissionYear}${courseLetter}${String(running).padStart(3, "0")}`;
-    });
-  };
+    }
 
+    // 🔥 CS / IT / BAF → 2 digit counter
+    return `${admissionYear}${courseLetter}${String(running).padStart(2, "0")}`;
+  });
+};
   const submitForm = async () => {
     if (!photoBase64 || selected.length === 0 || !signature) {
       toast.error("Please complete all sections (Photo, Subjects, Signature)");

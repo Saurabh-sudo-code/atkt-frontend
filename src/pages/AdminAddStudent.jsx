@@ -15,7 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 // Centralizing the API URL - Make sure this is set in Netlify Environment Variables
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:10000";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default function AdminAddStudent() {
   const [loading, setLoading] = useState(false);

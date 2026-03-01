@@ -42,6 +42,7 @@ export default function StudentForm() {
   const sigCanvas = useRef(null);
   const [signature, setSignature] = useState(null);
   const [systemSignature, setSystemSignature] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   /* ================= VALIDATION & DATA LOADING (Logic Unchanged) ================= */
   useEffect(() => {
@@ -67,7 +68,7 @@ export default function StudentForm() {
 
         const fetchSignatures = async () => {
           try {
-            const res = await fetch("https://atkt-backend.onrender.com/api/signatures");
+            const res = await fetch(`${API_URL}/api/signatures`);
             const data = await res.json();
             setSystemSignature(data);
           } catch (e) { console.error("Signatures not loaded"); }

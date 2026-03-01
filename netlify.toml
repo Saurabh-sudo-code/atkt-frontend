@@ -1,5 +1,0 @@
-[[redirects]]
-  from = "/api/*"
-  to = "https://atkt-mgt-backend.onrender.com/api/:splat"
-  status = 200
-  force = true

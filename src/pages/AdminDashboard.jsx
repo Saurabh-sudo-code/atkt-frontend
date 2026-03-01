@@ -211,17 +211,96 @@ export default function AdminDashboard() {
         </div>
 
         {/* RECORDS SECTION */}
-        <div className="p-6 border-b dark:border-slate-800 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-            Student ATKT Records
-          </h2>
+        <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border dark:border-slate-800 overflow-hidden">
+          <div className="p-6 border-b dark:border-slate-800 flex items-center justify-between">
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white">
+              Student ATKT Records
+            </h2>
+            <button
+              onClick={exportToExcel}
+              className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-xl font-semibold transition"
+            >
+              Export All to Excel
+            </button>
+          </div>
 
-          <button
-            onClick={exportToExcel}
-            className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-xl font-semibold transition"
-          >
-            Export All to Excel
-          </button>
+          {/* FILTERS */}
+          <div className="p-4 grid grid-cols-1 md:grid-cols-5 gap-3 bg-slate-50/50 dark:bg-slate-800/30 border-b dark:border-slate-800">
+            {["name", "seat", "course", "sem", "subject"].map((key) => (
+              <input
+                key={key}
+                placeholder={`Filter by ${key}...`}
+                className="w-full bg-white dark:bg-slate-800 border-none rounded-xl px-4 py-2 text-sm dark:text-white focus:ring-2 focus:ring-blue-500"
+                value={filters[key]}
+                onChange={(e) =>
+                  setFilters({ ...filters, [key]: e.target.value })
+                }
+              />
+            ))}
+          </div>
+
+          {/* CLEAN TABLE (No Whitespace Error) */}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-slate-50 dark:bg-slate-800 text-slate-400 font-bold uppercase text-[10px] tracking-widest border-b dark:border-slate-800">
+                <tr>
+                  <th className="px-6 py-4">Student</th>
+                  <th className="px-6 py-4">Roll No</th>
+                  <th className="px-6 py-4">Course/Sem</th>
+                  <th className="px-6 py-4 text-center">Scheme</th>
+                  <th className="px-6 py-4">KT Subjects</th>
+                  <th className="px-6 py-4 text-right">Seat No</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y dark:divide-slate-800">
+                {filteredApplications.length > 0 ? (
+                  filteredApplications.map((a) => (
+                    <tr
+                      key={a.id}
+                      className="hover:bg-blue-50/30 dark:hover:bg-blue-900/20 transition-colors"
+                    >
+                      <td className="px-6 py-4 font-bold text-slate-800 dark:text-slate-200">
+                        {a.studentName}
+                      </td>
+                      <td className="px-6 py-4 text-slate-500 dark:text-slate-400 font-medium">
+                        {a.rollNo}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="font-semibold text-blue-600 dark:text-blue-400">
+                          {a.stream}
+                        </div>
+                        <div className="text-[10px] text-slate-400 uppercase font-bold">
+                          {a.semester}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span
+                          className={`px-2 py-1 rounded text-[10px] font-black uppercase border ${a.scheme === "NEP" ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border-indigo-100 dark:border-indigo-800" : "bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700"}`}
+                        >
+                          {a.scheme || "NON-NEP"}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-xs text-slate-500 dark:text-slate-400 max-w-xs truncate">
+                        {a.subjects?.map((s) => s.name).join(", ")}
+                      </td>
+                      <td className="px-6 py-4 text-right font-mono font-bold text-slate-700 dark:text-slate-300">
+                        {a.seatNo}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="6"
+                      className="text-center py-20 text-slate-400 italic"
+                    >
+                      No records found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         {/* RESTORED MANAGEMENT CARDS */}
